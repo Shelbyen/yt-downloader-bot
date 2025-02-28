@@ -7,6 +7,7 @@ from aiogram.fsm.state import StatesGroup, State
 from aiogram.types import Message
 
 from src.i18n.i18n import i18n
+from src.yt_download.downloader import downloader
 
 router = Router()
 
@@ -32,4 +33,6 @@ async def get_link(message: Message):
         await message.answer(i18n.translate(message, 'wrong_link'))
         return
 
-    
+    file_name = downloader.download(parsed_url)
+
+    await message.bot.send_video(message.from_user.id, video=file_name, caption=file_name[:-4])
