@@ -26,7 +26,8 @@ async def get_link(message: Message):
     try:
         parsed_url = urlparse(message.text)
         hostname = parsed_url.hostname.split('.')
-        if 'youtube' not in hostname or 'youtu' not in hostname:
+        print(hostname)
+        if 'youtube' not in hostname and 'youtu' not in hostname:
             await message.answer(i18n.translate(message, 'wrong_link'))
             return
     except URLError:
