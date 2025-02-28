@@ -19,7 +19,7 @@ class I18n:
         for lang in Languages.SUPPORTED_LANGUAGES:
             lang_path = join(languages_dir, lang)
             if isdir(lang_path):
-                with open(join(lang_path, 'strings'), 'r', encoding='utf-8') as file:
+                with open(join(lang_path, 'strings.json'), 'r', encoding='utf-8') as file:
                     if lang not in self.translations:
                         self.translations[lang] = {}
                     self.translations[lang].update(json.load(file))
