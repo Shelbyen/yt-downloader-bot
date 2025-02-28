@@ -3,6 +3,8 @@ import logging
 from datetime import datetime
 
 from aiogram import Bot, Dispatcher
+from aiogram.client.session.aiohttp import AiohttpSession
+from aiogram.client.telegram import TelegramAPIServer
 
 from src.config.project_config import settings
 from src.handlers import routers
@@ -23,7 +25,8 @@ def setup_logging():
 
 
 async def main():
-    bot = Bot(token=settings.TOKEN)
+    session = AiohttpSession(api=TelegramAPIServer.from_base("http://localhost:8081", is_local=True))
+    bot = Bot(token=settings.TOKEN, session=session)
     dp = Dispatcher()
 
     dp.include_routers(*routers)
