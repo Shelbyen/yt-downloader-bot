@@ -15,7 +15,7 @@ class I18n:
         self.load_translations()
 
     def load_translations(self):
-        languages_dir = 'i18n'
+        languages_dir = 'src/i18n'
         for lang in Languages.SUPPORTED_LANGUAGES:
             lang_path = join(languages_dir, lang)
             if isdir(lang_path):
