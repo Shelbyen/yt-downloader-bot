@@ -1,9 +1,6 @@
 from os import listdir
 
-from yt_dlp import YoutubeDL, FFmpegPostProcessor
-
-
-FFmpegPostProcessor._ffmpeg_location.set('res/ffmpeg-master-latest-win64-gpl-shared/bin')
+from yt_dlp import YoutubeDL
 
 
 def progress_hook(d):
