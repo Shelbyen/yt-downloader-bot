@@ -16,10 +16,6 @@ def shorted_than_a_time(info, *, incomplete):
 
 ydl_opts = {
     'format': 'bv[width<=1920][ext=mp4]+ba[ext=m4a]',
-    # ℹ️ See help(yt_dlp.postprocessor) for a list of available Postprocessors and their arguments
-    'postprocessors': [{  # Extract audio using ffmpeg
-        'key': 'FFmpegExtractAudio'
-    }],
     'merge_output_format': 'mp4',
     'socket_timeout': 60,
     'progress_hooks': [progress_hook],
