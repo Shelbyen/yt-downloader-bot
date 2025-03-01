@@ -45,7 +45,7 @@ class Downloader:
         if error_code:
             raise Exception('Video failed to download')
 
-        for file_name in listdir():
+        for file_name in listdir('res/yt-dir'):
             if file_name.endswith(f'[{video_id}].mp4'):
                 return file_name
 
