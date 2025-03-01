@@ -24,12 +24,13 @@ ydl_opts = {
     'socket_timeout': 60,
     'progress_hooks': [progress_hook],
     'match_filter': shorted_than_a_time,
-    'paths': {'home': 'res/yt-dir', 'temp': 'temp'}
+    'paths': {'home': 'res/yt-dir', 'temp': 'temp'},
+    'quiet': True
 }
 
 
 def get_video_id(url) -> str:
-    with YoutubeDL({'check_formats': False}) as ytl:
+    with YoutubeDL({'check_formats': False, 'quiet': True}) as ytl:
         info = ytl.extract_info(url, download=False)
     return info.get('id')
 

@@ -35,4 +35,4 @@ async def get_link(message: Message):
 
     file_name = downloader.download(message.text)
 
-    await message.bot.send_video(message.from_user.id, video=file_name, caption=file_name[:-4])
+    await message.bot.send_video(message.from_user.id, video='res/yt-dir/' + file_name, caption=file_name[:-4])
