@@ -57,9 +57,9 @@ class Downloader:
         video_name = None
         video_thumbnail = None
         for file_name in listdir('res/yt-dir'):
-            if file_name.endswith(f'[{video_info['id']}].mp4'):
+            if file_name.endswith(f'[{video_info["id"]}].mp4'):
                 video_name = file_name
-            if file_name.endswith(f'[{video_info['id']}].{video_info['ext']}'):
+            if file_name.endswith(f'[{video_info["id"]}].{video_info["ext"]}'):
                 video_thumbnail = file_name
         return video_name, video_thumbnail, video_info
 
