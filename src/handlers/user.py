@@ -5,7 +5,7 @@ from urllib.parse import urlparse
 from aiogram import Router
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.state import StatesGroup, State
-from aiogram.types import Message, FSInputFile, InputMediaVideo
+from aiogram.types import Message, FSInputFile
 from aiogram.utils.chat_action import ChatActionSender
 
 from src.i18n.i18n import i18n
@@ -39,4 +39,4 @@ async def get_link(message: Message):
     file_name = downloader.download(message.text)
     with ChatActionSender.upload_video(message.from_user.id, message.bot):
         video_file = FSInputFile(path=os.path.join(all_media_dir, file_name))
-        await message.answer_video(video_file, caption=file_name[:-4])
+        await message.answer_video(video_file, caption=file_name[:-4], supports_streaming=True)
