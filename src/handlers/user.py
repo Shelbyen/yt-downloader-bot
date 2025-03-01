@@ -57,10 +57,19 @@ async def get_link(message: Message):
     if not result_info:
         await message.answer('Долбоеб?')
         return
-    file_name, yt_id = result_info
+    video_name, thumbnail_name, info = result_info
+
     async with ChatActionSender.upload_video(message.from_user.id, message.bot):
-        video_file = FSInputFile(path=os.path.join(all_media_dir, file_name))
-        msg = await message.answer_video(video_file, caption=file_name[:-4], supports_streaming=True)
+        video_file = FSInputFile(path=os.path.join(all_media_dir, video_name))
+        thumbnail_file = None
+        if thumbnail_name:
+            thumbnail_file = FSInputFile(path=os.path.join(all_media_dir, thumbnail_name))
+
+        msg = await message.answer_video(video_file,
+                                         thumbnail=thumbnail_file,
+                                         duration=info['duration'],
+                                         caption=video_name[:-4],
+                                         supports_streaming=True)
 
     video_file_id = msg.video.file_id
 

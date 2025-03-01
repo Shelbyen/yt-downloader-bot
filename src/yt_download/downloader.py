@@ -27,14 +27,15 @@ ydl_opts = {
     # 'progress_hooks': [progress_hook],
     'match_filter': shorted_than_a_time,
     'paths': {'home': 'res/yt-dir', 'temp': 'temp'},
-    'quiet': True
+    'quiet': True,
+    'writethumbnail': True
 }
 
 
-def get_video_id(url) -> str:
+def get_video_info(url) -> dict:
     with YoutubeDL({'check_formats': False, 'quiet': True}) as ytl:
         info = ytl.extract_info(url, download=False)
-    return info.get('id')
+    return info
 
 
 class Downloader:
@@ -42,8 +43,8 @@ class Downloader:
         self.download_now = {}
         self.download_now_id = {}
 
-    async def download(self, url: str, message: Message) -> tuple[str, str]:
-        video_id = get_video_id(url)
+    async def download(self, url: str, message: Message) -> tuple[str, str, dict]:
+        video_info = get_video_info(url)
         # self.download_now_id[message.from_user.id] = video_id
         # self.download_now[video_id] = 0
 
@@ -53,9 +54,15 @@ class Downloader:
         if error_code:
             raise Exception('Video failed to download')
 
+        video_name = None
+        video_thumbnail = None
         for file_name in listdir('res/yt-dir'):
-            if file_name.endswith(f'[{video_id}].mp4'):
-                return file_name, video_id
+            if file_name.endswith(f'[{video_info['id']}].mp4'):
+                video_name = file_name
+            if file_name.endswith(f'[{video_info['id']}].{video_info['ext']}'):
+                video_thumbnail = file_name
+        return video_name, video_thumbnail, video_info
+
 
 
 downloader = Downloader()
