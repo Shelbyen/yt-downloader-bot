@@ -11,7 +11,7 @@ from src.i18n.i18n import i18n
 from src.yt_download.downloader import downloader
 
 router = Router()
-all_media_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'res/ytl-dir')
+all_media_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'res/yt-dir')
 
 
 class DownloadingVideo(StatesGroup):
