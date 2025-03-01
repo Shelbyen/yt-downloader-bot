@@ -4,6 +4,6 @@ from src.handlers import user, debug
 debug.router.message.filter(PermissionFilter())
 
 routers = (
-    user.router,
-    debug.router
+    debug.router,
+    user.router
 )
