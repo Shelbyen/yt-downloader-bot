@@ -64,7 +64,7 @@ async def get_link(message: Message):
         thumbnail_file = None
         if thumbnail_name:
             thumbnail_file = FSInputFile(path=os.path.join(all_media_dir, thumbnail_name))
-
+        print(thumbnail_file)
         msg = await message.answer_video(video_file,
                                          thumbnail=thumbnail_file,
                                          duration=info['duration'],
