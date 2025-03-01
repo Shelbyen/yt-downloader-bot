@@ -26,7 +26,6 @@ async def get_link(message: Message):
     try:
         parsed_url = urlparse(message.text)
         hostname = parsed_url.hostname.split('.')
-        print(hostname)
         if 'youtube' not in hostname and 'youtu' not in hostname:
             await message.answer(i18n.translate(message, 'wrong_link'))
             return
@@ -34,6 +33,6 @@ async def get_link(message: Message):
         await message.answer(i18n.translate(message, 'wrong_link'))
         return
 
-    file_name = downloader.download(parsed_url)
+    file_name = downloader.download(message.text)
 
     await message.bot.send_video(message.from_user.id, video=file_name, caption=file_name[:-4])
