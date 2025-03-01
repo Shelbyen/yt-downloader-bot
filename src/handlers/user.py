@@ -3,6 +3,7 @@ from urllib.error import URLError
 from urllib.parse import urlparse
 
 from aiogram import Router
+from aiogram.enums import ContentType
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.types import Message, FSInputFile
@@ -24,7 +25,7 @@ async def start_message(message: Message):
     await message.answer(i18n.translate(message, 'start_message'))
 
 
-@router.message(StateFilter(None))
+@router.message(StateFilter(None), content_types=[ContentType.TEXT])
 async def get_link(message: Message):
     try:
         parsed_url = urlparse(message.text)
