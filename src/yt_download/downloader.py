@@ -4,6 +4,8 @@ from os import listdir
 from aiogram.types import Message
 from yt_dlp import YoutubeDL
 
+from src.services.video_service import video_service
+
 
 def progress_hook(d):
     if d['status'] == 'downloading' and d.get('total_bytes_estimate') and d.get('downloaded_bytes'):
@@ -42,8 +44,13 @@ class Downloader:
         self.download_now = {}
         self.download_now_id = {}
 
-    async def download(self, url: str, message: Message) -> tuple[str, dict]:
+    async def download(self, url: str, message: Message) -> tuple[str, dict, bool]:
         video_info = get_video_info(url)
+
+        saved_file_id = await video_service.get(video_info['id'])
+        if saved_file_id:
+            return saved_file_id, video_info, True
+
         # self.download_now_id[message.from_user.id] = video_id
         # self.download_now[video_id] = 0
 
@@ -57,7 +64,7 @@ class Downloader:
         for file_name in listdir('res/yt-dir'):
             if file_name.endswith(f'[{video_info["id"]}].mp4'):
                 video_name = file_name
-        return video_name, video_info
+        return video_name, video_info, False
 
 
 downloader = Downloader()
