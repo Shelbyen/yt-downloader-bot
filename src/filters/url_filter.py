@@ -9,6 +9,8 @@ from src.i18n.i18n import i18n
 
 class UrlFilter(BaseFilter):
     async def __call__(self, message: Message) -> bool:
+        if not message.text:
+            return False
         try:
             parsed_url = urlparse(message.text)
             hostname = parsed_url.hostname.split('.')
