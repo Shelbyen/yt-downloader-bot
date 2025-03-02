@@ -57,7 +57,7 @@ async def get_link(message: Message):
     if not result_info:
         await message.answer('Долбоеб?')
         return
-    video_name, thumbnail_name, info = result_info
+    video_name, info = result_info
 
     async with ChatActionSender.upload_video(message.from_user.id, message.bot):
         video_file = FSInputFile(path=os.path.join(all_media_dir, video_name))
