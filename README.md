@@ -33,5 +33,5 @@ ADMINS=<first_admin>/<second_admin> # ids of admins of your bot. you can get it 
 # Using
 And now you can just run it
 ```bash
-python main.py
+python bot.py
 ```
