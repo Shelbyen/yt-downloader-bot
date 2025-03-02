@@ -17,17 +17,18 @@ def progress_hook(d):
     asyncio.get_event_loop().create_task(asyncio.sleep(0.01))
 
 
-def shorted_than_a_time(info):
+def shorted_than_a_time(info, *, incomplete):
     duration = info.get('duration')
     if duration and duration > 4 * 60 * 60:
-        return True
+        return 'The video is too long'
 
 
 ydl_opts = {
     'format': 'bv[width<=1920][ext=mp4]+ba[ext=m4a]',
     'merge_output_format': 'mp4',
     'socket_timeout': 60,
-    # 'progress_hooks': [progress_hook]
+    # 'progress_hooks': [progress_hook],
+    'match_filter': shorted_than_a_time,
     'paths': {'home': 'res/yt-dir', 'temp': 'temp'},
     'quiet': True
 }
@@ -50,9 +51,6 @@ class Downloader:
         saved_file_id: VideoBase | None = await video_service.get(video_info['id'])
         if saved_file_id:
             return saved_file_id.file_id, video_info, True
-
-        if shorted_than_a_time(video_info):
-            return None, None, False
 
         # self.download_now_id[message.from_user.id] = video_id
         # self.download_now[video_id] = 0
