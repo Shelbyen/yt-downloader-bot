@@ -6,7 +6,7 @@ from urllib.parse import urlparse
 from aiogram import Router, F
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.state import StatesGroup, State
-from aiogram.types import Message, FSInputFile
+from aiogram.types import Message, FSInputFile, InputFile
 from aiogram.utils.chat_action import ChatActionSender
 
 from src.i18n.i18n import i18n
@@ -16,6 +16,17 @@ from src.yt_download.downloader import downloader
 
 router = Router()
 all_media_dir = 'res/yt-dir'
+
+
+async def extract_info_send_video(message: Message, video_file: InputFile | str, yt_info: dict):
+    msg = await message.answer_video(video_file,
+                                     width=yt_info['width'],
+                                     height=yt_info['height'],
+                                     duration=yt_info['duration'],
+                                     cover=yt_info['thumbnail'],
+                                     caption=yt_info['title'] + f' [{yt_info["id"]}]',
+                                     supports_streaming=True)
+    return msg
 
 
 async def send_progress(message: Message):
@@ -58,10 +69,7 @@ async def get_link(message: Message):
     result_info = await downloader.download(message.text, progress_message)
 
     if result_info[2]:
-        await message.answer_video(result_info[0],
-                                   caption=result_info[1]['title']  + f' [{result_info[1]["id"]}]',
-                                   cover=result_info[1]['thumbnail']
-                                   )
+        await extract_info_send_video(progress_message, result_info[0], result_info[1])
         return
     if not (result_info[0] and result_info[1]):
         await message.answer(i18n.translate(message, 'wrong_link'))
@@ -70,12 +78,7 @@ async def get_link(message: Message):
 
     async with ChatActionSender.upload_video(message.from_user.id, message.bot):
         video_file = FSInputFile(path=os.path.join(all_media_dir, video_name))
-        msg = await message.answer_video(video_file,
-                                         cover=info['thumbnail'],
-                                         duration=info['duration'],
-                                         caption=video_name[:-4],
-                                         supports_streaming=True)
-
+        msg = await extract_info_send_video(progress_message, video_file, info)
     video_file_id = msg.video.file_id
     await video_service.create(VideoCreate(id=info['id'], file_id=video_file_id))
 
