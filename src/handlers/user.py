@@ -54,7 +54,7 @@ async def get_link(message: Message):
     # downloader.download_now_id[message.from_user.id] = 'starting'
     # tt = await asyncio.gather(send_progress(message), downloader.download(message.text, progress_message))
     result_info = await downloader.download(message.text, progress_message)
-    if not result_info:
+    if not (result_info[0] and result_info[1]):
         await message.answer('Долбоеб?')
         return
     video_name, info = result_info
