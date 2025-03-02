@@ -17,17 +17,6 @@ router = Router()
 all_media_dir = 'res/yt-dir'
 
 
-async def extract_info_send_video(message: Message, video_file: InputFile | str, yt_info: dict):
-    msg = await message.answer_video(video_file,
-                                     width=yt_info['width'],
-                                     height=yt_info['height'],
-                                     duration=yt_info['duration'],
-                                     cover=yt_info['thumbnail'],
-                                     caption=yt_info['title'] + f' [{yt_info["id"]}]',
-                                     supports_streaming=True)
-    return msg
-
-
 async def send_progress(message: Message):
     while (video_id := downloader.download_now_id.get(message.from_user.id)) == 'starting':
         await asyncio.sleep(1)

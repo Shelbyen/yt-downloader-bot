@@ -8,6 +8,9 @@ from src.i18n.i18n import i18n
 
 
 class UrlFilter(BaseFilter):
+    def __init__(self, answer_when_wrong: bool = True):
+        self.answer_when_wrong = answer_when_wrong
+
     async def __call__(self, message: Message) -> bool:
         if not message.text:
             return False
@@ -15,9 +18,11 @@ class UrlFilter(BaseFilter):
             parsed_url = urlparse(message.text)
             hostname = parsed_url.hostname.split('.')
             if 'youtube' not in hostname and 'youtu' not in hostname:
-                await message.answer(i18n.translate(message, 'wrong_link'))
+                if self.answer_when_wrong:
+                    await message.answer(i18n.translate(message, 'wrong_link'))
                 return False
         except URLError:
-            await message.answer(i18n.translate(message, 'wrong_link'))
+            if self.answer_when_wrong:
+                await message.answer(i18n.translate(message, 'wrong_link'))
             return False
         return True

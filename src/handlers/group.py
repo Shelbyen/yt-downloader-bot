@@ -15,7 +15,7 @@ router = Router()
 all_media_dir = 'res/yt-dir'
 
 
-@router.message(UrlFilter())
+@router.message(UrlFilter(answer_when_wrong=False))
 async def check_message(message: Message):
     progress_message = await message.reply(i18n.translate(message, 'starting_download'))
 
