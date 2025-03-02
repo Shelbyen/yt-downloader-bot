@@ -22,7 +22,7 @@ Create A file with name `.env` in the root of project. And fill it in as shown b
 ```bash
 TOKEN=<token> # (REQUIRED to be filled) your telegram bot token, detail here: https://core.telegram.org/bots/features#botfather
 VERSION=<bot_version> # version of this project. Its only used in a logging, so you can leave it blank(but this field is REQUIRED)
-ADMINS=<first_admin>/<second_admin> # admins of your bot. you can get it here: https://t.me/getmyid_bot
+ADMINS=<first_admin>/<second_admin> # ids of admins of your bot. you can get it here: https://t.me/getmyid_bot
 ```
 > [!Note]
 > **All fields must be present, but not all must be filled in.**
