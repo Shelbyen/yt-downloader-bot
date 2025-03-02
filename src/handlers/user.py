@@ -75,3 +75,5 @@ async def get_link(message: Message):
 
     video_file_id = msg.video.file_id
     await video_service.create(VideoCreate(id=info['id'], file_id=video_file_id))
+
+    os.remove(os.path.join(all_media_dir, video_name))
