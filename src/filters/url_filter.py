@@ -16,6 +16,12 @@ class UrlFilter(BaseFilter):
             return False
         try:
             parsed_url = urlparse(message.text)
+
+            if not parsed_url.hostname:
+                if self.answer_when_wrong:
+                    await message.answer(i18n.translate(message, 'wrong_link'))
+                return False
+
             hostname = parsed_url.hostname.split('.')
             if 'youtube' not in hostname and 'youtu' not in hostname:
                 if self.answer_when_wrong:
