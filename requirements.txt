@@ -2,3 +2,5 @@ aiogram~=3.18.0
 python-dotenv~=1.0.1
 pydantic-settings~=2.8.0
 yt-dlp~=2025.2.19
+pydantic~=2.10.6
+SQLAlchemy~=2.0.38
