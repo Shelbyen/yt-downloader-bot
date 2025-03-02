@@ -62,9 +62,9 @@ async def get_link(message: Message):
         await message.answer(i18n.translate(message, 'wrong_link'))
         return
 
-    video_name, info, _ = result_info
+    video_name, info, is_exist = result_info
 
-    if result_info[2]:
+    if is_exist:
         await message.answer_video(video_name, **create_info_dict_for_send(info))
         return
 
