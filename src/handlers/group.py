@@ -32,7 +32,7 @@ async def check_message(message: Message):
         await message.reply_video(video_name, **create_info_dict_for_send(info))
         return
 
-    async with ChatActionSender.upload_video(message.from_user.id, message.bot):
+    async with ChatActionSender.upload_video(message.chat.id, message.bot):
         video_file = FSInputFile(path=os.path.join(all_media_dir, video_name))
         msg = await message.reply_video(video_file, **create_info_dict_for_send(info))
 
