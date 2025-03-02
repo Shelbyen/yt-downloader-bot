@@ -58,7 +58,7 @@ async def get_link(message: Message):
     result_info = await downloader.download(message.text, progress_message)
 
     if result_info[2]:
-        await message.answer_video(result_info[0], caption=result_info[1]['title'] + f'[{result_info[1]['id']}]')
+        await message.answer_video(result_info[0], caption=result_info[1]['title']  + f' [{result_info[1]["id"]}]')
         return
     if not (result_info[0] and result_info[1]):
         await message.answer(i18n.translate(message, 'wrong_link'))
