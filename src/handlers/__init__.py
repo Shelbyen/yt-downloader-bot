@@ -1,11 +1,9 @@
-from aiogram import F
-
+from src.filters.chat_type_filter import ChatTypeFilter
 from src.filters.permission_filter import PermissionFilter
 from src.handlers import user, debug, group
 
 debug.router.message.filter(PermissionFilter())
-group.router.message.filter(F.chat.type in ["group", "supergroup"])
-
+group.router.message.filter(ChatTypeFilter(is_group=True))
 
 routers = (
     debug.router,
