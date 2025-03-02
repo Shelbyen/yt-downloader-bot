@@ -25,8 +25,8 @@ def setup_logging():
 
 
 async def main():
-    session = AiohttpSession(api=TelegramAPIServer.from_base("http://localhost:8081", is_local=True))
-    bot = Bot(token=settings.TOKEN, session=session)
+    # session = AiohttpSession(api=TelegramAPIServer.from_base("http://localhost:8081", is_local=True))
+    bot = Bot(token=settings.TOKEN)
     dp = Dispatcher()
 
     dp.include_routers(*routers)
@@ -34,7 +34,7 @@ async def main():
     dp.startup.register(on_startup)
 
     await bot.delete_webhook(drop_pending_updates=True)
-    setup_logging()
+    # setup_logging()
     await dp.start_polling(bot)
 
 
