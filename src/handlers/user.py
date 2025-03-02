@@ -62,8 +62,7 @@ async def get_link(message: Message):
     async with ChatActionSender.upload_video(message.from_user.id, message.bot):
         video_file = FSInputFile(path=os.path.join(all_media_dir, video_name))
         image = URLInputFile(
-            info['thumbnail'],
-            filename=f"thumbnail_{info['id']}.png"
+            info['thumbnail']
         )
 
         msg = await message.answer_video(video_file,
