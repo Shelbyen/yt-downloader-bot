@@ -6,13 +6,13 @@ from urllib.parse import urlparse
 from aiogram import Router, F
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.state import StatesGroup, State
-from aiogram.types import Message, FSInputFile, URLInputFile
+from aiogram.types import Message, FSInputFile
 from aiogram.utils.chat_action import ChatActionSender
 
 from src.i18n.i18n import i18n
 from src.schemas.video_schema import VideoCreate
 from src.services.video_service import video_service
-from src.yt_download.downloader import downloader, get_video_info
+from src.yt_download.downloader import downloader
 
 router = Router()
 all_media_dir = 'res/yt-dir'
