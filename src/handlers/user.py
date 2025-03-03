@@ -1,9 +1,10 @@
 import asyncio
 import os
 from aiogram import Router
+from aiogram.exceptions import TelegramBadRequest
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.state import StatesGroup, State
-from aiogram.types import Message, FSInputFile, InputFile
+from aiogram.types import Message, FSInputFile
 from aiogram.utils.chat_action import ChatActionSender
 
 from src.filters.url_filter import UrlFilter
@@ -59,7 +60,11 @@ async def get_link(message: Message):
 
     async with ChatActionSender.upload_video(message.from_user.id, message.bot):
         video_file = FSInputFile(path=os.path.join(all_media_dir, video_name))
-        msg = await message.answer_video(video_file, **create_info_dict_for_send(info))
+        try:
+            msg = await message.answer_video(video_file, **create_info_dict_for_send(info))
+        except TelegramBadRequest as e:
+            if 'FILE_PARTS_INVALID' in e.message:
+                await message.answer(i18n.translate(message, 'video_to_large'))
 
     video_file_id = msg.video.file_id
     await video_service.create(VideoCreate(id=info['id'], file_id=video_file_id))
