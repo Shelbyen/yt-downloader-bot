@@ -1,6 +1,3 @@
-from urllib.error import URLError
-from urllib.parse import urlparse
-
 from aiogram.filters import BaseFilter
 from aiogram.types import Message
 
@@ -20,7 +17,7 @@ class UrlFilter(BaseFilter):
             YoutubeUrlIsValidUseCase.execute(url)
         except UrlParseError as exception:
             if self.answer_when_wrong:
-                warning_text = i18n.translate(message, exception.key)
+                warning_text = i18n.translate(message.from_user.language_code, exception.key)
                 message.answer(warning_text)
             return False
         return True

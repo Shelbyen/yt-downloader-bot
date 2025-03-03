@@ -5,7 +5,7 @@ from aiogram.types import Message, FSInputFile
 from aiogram.utils.chat_action import ChatActionSender
 
 from src.filters.url_filter import UrlFilter
-from src.i18n.i18n import i18n
+from src.middlewares.message_wrapping import LocalizedMessageWrapper
 from src.schemas.video_schema import VideoCreate
 from src.services.video_service import video_service
 from src.use_cases.download_send_video_use_case import create_info_dict_for_send
@@ -16,8 +16,8 @@ all_media_dir = 'res/yt-dir'
 
 
 @router.message(UrlFilter(answer_when_wrong=False))
-async def check_message(message: Message):
-    progress_message = await message.reply(i18n.translate(message, 'starting_download'))
+async def check_message(message: Message, localized_message: LocalizedMessageWrapper):
+    progress_message = await localized_message.reply('starting_download')
 
     result_info = await downloader.download(message.text, progress_message)
 
