@@ -4,7 +4,9 @@ from urllib.parse import urlparse
 from aiogram.filters import BaseFilter
 from aiogram.types import Message
 
+from src.exceptions.url_parse_exceptions import UrlParseError
 from src.i18n.i18n import i18n
+from src.use_cases.youtube_url_is_valid_use_case import YoutubeUrlIsValidUseCase
 
 
 class UrlFilter(BaseFilter):
@@ -12,23 +14,13 @@ class UrlFilter(BaseFilter):
         self.answer_when_wrong = answer_when_wrong
 
     async def __call__(self, message: Message) -> bool:
-        if not message.text:
-            return False
+        url = message.text
+
         try:
-            parsed_url = urlparse(message.text)
-
-            if not parsed_url.hostname:
-                if self.answer_when_wrong:
-                    await message.answer(i18n.translate(message, 'wrong_link'))
-                return False
-
-            hostname = parsed_url.hostname.split('.')
-            if 'youtube' not in hostname and 'youtu' not in hostname:
-                if self.answer_when_wrong:
-                    await message.answer(i18n.translate(message, 'wrong_link'))
-                return False
-        except URLError:
+            YoutubeUrlIsValidUseCase.execute(url)
+        except UrlParseError as exception:
             if self.answer_when_wrong:
-                await message.answer(i18n.translate(message, 'wrong_link'))
+                warning_text = i18n.translate(message, exception.key)
+                message.answer(warning_text)
             return False
         return True

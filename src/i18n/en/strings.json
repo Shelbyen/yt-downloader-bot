@@ -1,3 +1,8 @@
 {
-  "start_message": "Hi!\nEnter your link and im send your video)"
+  "start_message": "Hi!\nEnter your link and im send your video)",
+  "starting_download": "Download is start!"
+  // "url_parse_error": "",
+  // "is_not_youtube_url_error": "",
+  // "invalid_url_error": "",
+  // "is_not_video_url_error": ""
 }
