@@ -1,7 +1,7 @@
 from aiogram.filters import BaseFilter
 from aiogram.types import Message, CallbackQuery
 
-from src.config.project_config import settings
+from src.config import project_settings
 
 
 class PermissionFilter(BaseFilter):
@@ -9,5 +9,5 @@ class PermissionFilter(BaseFilter):
         self.is_exists = is_exists
 
     async def __call__(self, event: Message | CallbackQuery) -> bool:
-        user = str(event.from_user.id) in settings.ADMINS.split('/')
+        user = str(event.from_user.id) in project_settings.ADMINS.split('/')
         return user == self.is_exists

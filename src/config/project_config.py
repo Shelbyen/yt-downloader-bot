@@ -9,6 +9,3 @@ class Settings(BaseSettings):
     TOKEN: str
     VERSION: str
     ADMINS: str
-
-
-settings = Settings()
