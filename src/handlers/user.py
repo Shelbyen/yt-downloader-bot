@@ -8,7 +8,7 @@ from aiogram.types import Message, FSInputFile
 from aiogram.utils.chat_action import ChatActionSender
 
 from src.filters.url_filter import UrlFilter
-from src.i18n.i18n import i18n
+from src.middlewares.message_wrapping import LocalizedMessageWrapper
 from src.schemas.video_schema import VideoCreate
 from src.services.video_service import video_service
 from src.use_cases.download_send_video_use_case import create_info_dict_for_send
@@ -35,13 +35,13 @@ class DownloadingVideo(StatesGroup):
 
 
 @router.message(Command('start'))
-async def start_message(message: Message):
-    await message.answer(i18n.translate(message, 'start_message'))
+async def start_message(_: Message, localized_message: LocalizedMessageWrapper):
+    await localized_message.answer('start_message')
 
 
 @router.message(StateFilter(None), UrlFilter())
-async def get_link(message: Message):
-    progress_message = await message.answer(i18n.translate(message, 'starting_download'))
+async def get_link(message: Message, localized_message: LocalizedMessageWrapper):
+    progress_message = await localized_message.answer('starting_download')
 
     # downloader.download_now_id[message.from_user.id] = 'starting'
     # tt = await asyncio.gather(send_progress(message), downloader.download(message.text, progress_message))
@@ -49,7 +49,7 @@ async def get_link(message: Message):
     await progress_message.delete()
 
     if not (result_info[0] and result_info[1]):
-        await message.answer(i18n.translate(message, 'wrong_link'))
+        await localized_message.answer('wrong_link')
         return
 
     video_name, info, is_exist = result_info
@@ -64,7 +64,7 @@ async def get_link(message: Message):
             msg = await message.answer_video(video_file, **create_info_dict_for_send(info))
         except TelegramBadRequest as e:
             if 'FILE_PARTS_INVALID' in e.message:
-                await message.answer(i18n.translate(message, 'video_to_large'))
+                await localized_message.answer('video_to_large')
 
     video_file_id = msg.video.file_id
     await video_service.create(VideoCreate(id=info['id'], file_id=video_file_id))
