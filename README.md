@@ -10,7 +10,7 @@ For setup the ***yt-downloader-bot***:
 ## Clone
 Clone it to any place on your machine:
 ```bash
-git clone https://github.com/jaka2005/kwork-parser.git
+git clone https://github.com/Shelbyen/yt-downloader-bot.git
 ```
 ## Install requirements
 ```bash
