@@ -8,18 +8,18 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from alembic import context
 
 from migrations.base import Base
-from src.config.database.db_config import settings_db
+from src.config import database_config
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 
 section = config.config_ini_section
-config.set_section_option(section, "POSTGRES_HOST", settings_db.POSTGRES_HOST)
-config.set_section_option(section, "POSTGRES_PORT", settings_db.POSTGRES_PORT)
-config.set_section_option(section, "POSTGRES_USER", settings_db.POSTGRES_USER)
-config.set_section_option(section, "POSTGRES_DB", settings_db.POSTGRES_DB)
-config.set_section_option(section, "POSTGRES_PASSWORD", settings_db.POSTGRES_PASSWORD)
+config.set_section_option(section, "POSTGRES_HOST", database_config.POSTGRES_HOST)
+config.set_section_option(section, "POSTGRES_PORT", database_config.POSTGRES_PORT)
+config.set_section_option(section, "POSTGRES_USER", database_config.POSTGRES_USER)
+config.set_section_option(section, "POSTGRES_DB", database_config.POSTGRES_DB)
+config.set_section_option(section, "POSTGRES_PASSWORD", database_config.POSTGRES_PASSWORD)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
