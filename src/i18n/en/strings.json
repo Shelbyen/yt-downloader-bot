@@ -1,8 +1,8 @@
 {
   "start_message": "Hi!\nEnter your link and im send your video)",
-  "starting_download": "Download is start!"
-  // "url_parse_error": "",
-  // "is_not_youtube_url_error": "",
-  // "invalid_url_error": "",
-  // "is_not_video_url_error": ""
+  "starting_download": "Download is start!",
+  "url_parse_error": "I can't make out what you sent",
+  "is_not_youtube_url_error": "The link should be in YouTube",
+  "invalid_url_error": "It seems you didn't send the link, please send the link to the YouTube video so that I can download it for you",
+  "is_not_video_url_error": "You sent a link to the YouTube website, you need a link to a YouTube video"
 }
