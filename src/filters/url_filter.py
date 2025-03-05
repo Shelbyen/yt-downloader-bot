@@ -11,10 +11,8 @@ class UrlFilter(BaseFilter):
         self.answer_when_wrong = answer_when_wrong
 
     async def __call__(self, message: Message) -> bool:
-        url = message.text
-
         try:
-            YoutubeUrlIsValidUseCase().execute(url)
+            YoutubeUrlIsValidUseCase().execute(message)
         except UrlParseError as exception:
             if self.answer_when_wrong:
                 warning_text = i18n.translate(message.from_user.language_code, exception.key)
