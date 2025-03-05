@@ -65,6 +65,10 @@ async def get_link(message: Message, localized_message: LocalizedMessageWrapper)
         except TelegramBadRequest as e:
             if 'FILE_PARTS_INVALID' in e.message:
                 await localized_message.answer('video_to_large')
+            else:
+                await localized_message.answer('Неизвестная ошибка)')
+                print(e)
+            return
 
     video_file_id = msg.video.file_id
     await video_service.create(VideoCreate(id=info['id'], file_id=video_file_id))
