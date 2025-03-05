@@ -67,7 +67,7 @@ async def get_link(message: Message, localized_message: LocalizedMessageWrapper)
                 await localized_message.answer('video_to_large')
             else:
                 await localized_message.answer('Неизвестная ошибка)')
-                print(e)
+                print(e, video_file, create_info_dict_for_send(info))
             return
 
     video_file_id = msg.video.file_id
