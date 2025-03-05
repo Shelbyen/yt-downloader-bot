@@ -14,10 +14,10 @@ class UrlFilter(BaseFilter):
         url = message.text
 
         try:
-            YoutubeUrlIsValidUseCase.execute(url)
+            YoutubeUrlIsValidUseCase().execute(url)
         except UrlParseError as exception:
             if self.answer_when_wrong:
                 warning_text = i18n.translate(message.from_user.language_code, exception.key)
-                message.answer(warning_text)
+                await message.answer(warning_text)
             return False
         return True

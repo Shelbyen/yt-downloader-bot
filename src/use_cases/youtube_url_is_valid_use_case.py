@@ -6,7 +6,7 @@ from src.exceptions.url_parse_exceptions import InvalidUrlError
 
 
 class YoutubeUrlIsValidUseCase(object):
-    def execute(url: str) -> bool:
+    def execute(self, url: str) -> bool:
         try:
             parsed_url = urlparse(url)
 
