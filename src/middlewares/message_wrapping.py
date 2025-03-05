@@ -1,7 +1,6 @@
 from typing import Any, Awaitable, Callable, Dict
 
 from aiogram import BaseMiddleware
-from aiogram.methods import SendMessage
 from aiogram.types import TelegramObject, Message
 
 from src.i18n.i18n import i18n
@@ -24,14 +23,14 @@ class LocalizedMessageWrapper:
     def __init__(self, msg: Message):
         self.msg = msg
 
-    async def answer(self, string_key: str, *args, **kwargs) -> SendMessage:
-        return self.msg.answer(
+    async def answer(self, string_key: str, *args, **kwargs) -> Message:
+        return await self.msg.answer(
             i18n.translate(self.msg.from_user.language_code, string_key),
             *args, **kwargs
         )
 
-    async def reply(self, string_key: str, *args, **kwargs) -> SendMessage:
-        return self.msg.reply(
+    async def reply(self, string_key: str, *args, **kwargs) -> Message:
+        return await self.msg.reply(
             i18n.translate(self.msg.from_user.language_code, string_key),
             *args, **kwargs
         )
