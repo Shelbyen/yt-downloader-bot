@@ -12,7 +12,7 @@ class UrlFilter(BaseFilter):
 
     async def __call__(self, message: Message) -> bool:
         try:
-            YoutubeUrlIsValidUseCase().execute(message)
+            YoutubeUrlIsValidUseCase().execute(message.text, message.entities)
         except UrlParseError as exception:
             if self.answer_when_wrong:
                 warning_text = i18n.translate(message.from_user.language_code, exception.key)

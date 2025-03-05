@@ -1,16 +1,15 @@
 from urllib.error import URLError
 from urllib.parse import urlparse
 
-from aiogram.types import Message
+from aiogram.types import MessageEntity
 
 from src.exceptions.url_parse_exceptions import IsNotYoutubeUrlError
 from src.exceptions.url_parse_exceptions import InvalidUrlError
 
 
 class YoutubeUrlIsValidUseCase(object):
-    def execute(self, message: Message) -> bool:
-        entities = message.entities or []
-        urls = [entity.url for entity in entities if entity.url] or []
+    def execute(self, message_text: str | None, entities: list[MessageEntity] | None) -> bool:
+        urls = [item.extract_from(message_text or '') for item in (entities or []) if item.url] or []
         if len(urls) == 0:
             raise InvalidUrlError()
         url = urls[0]
