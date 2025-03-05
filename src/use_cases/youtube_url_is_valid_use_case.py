@@ -9,7 +9,8 @@ from src.exceptions.url_parse_exceptions import InvalidUrlError
 
 class YoutubeUrlIsValidUseCase(object):
     def execute(self, message: Message) -> bool:
-        urls = [entity.url for entity in message.entities if entity.url] or []
+        entities = message.entities or []
+        urls = [entity.url for entity in entities if entity.url] or []
         if len(urls) == 0:
             raise InvalidUrlError()
         url = urls[0]
