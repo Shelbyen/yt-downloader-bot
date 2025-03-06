@@ -25,7 +25,7 @@ async def check_message(message: Message, localized_message: LocalizedMessageWra
 
     async with ChatActionSender.upload_video(message.from_user.id, message.bot):
         try:
-            msg = await SendVideoUseCase().execute_reply(result_video, message)
+            msg = await SendVideoUseCase().execute(result_video, message.reply_video)
         except SendingError:
             return
 

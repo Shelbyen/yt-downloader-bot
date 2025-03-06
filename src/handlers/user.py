@@ -51,7 +51,7 @@ async def get_link(message: Message, localized_message: LocalizedMessageWrapper)
 
     async with ChatActionSender.upload_video(message.from_user.id, message.bot):
         try:
-            msg = await SendVideoUseCase().execute_answer(result_video, message)
+            msg = await SendVideoUseCase().execute(result_video, message.answer_video)
         except BigFileError:
             await localized_message.answer('video_too_big')
             return
