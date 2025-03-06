@@ -1,14 +1,15 @@
 import os
 
 from aiogram import Router
-from aiogram.types import Message, FSInputFile
+from aiogram.types import Message
 from aiogram.utils.chat_action import ChatActionSender
 
+from src.exceptions.sending_exceptions import SendingError
 from src.filters.url_filter import UrlFilter
 from src.middlewares.message_wrapping import LocalizedMessageWrapper
 from src.schemas.video_schema import VideoCreate
 from src.services.video_service import video_service
-from src.use_cases.download_send_video_use_case import create_info_dict_for_send
+from src.use_cases.send_video_use_case import SendVideoUseCase
 from src.yt_download.downloader import downloader
 
 router = Router()
@@ -19,24 +20,18 @@ all_media_dir = 'res/yt-dir'
 async def check_message(message: Message, localized_message: LocalizedMessageWrapper):
     progress_message = await localized_message.reply('starting_download')
 
-    result_info = await downloader.download(message.text, progress_message)
-
+    result_video, video_id = await downloader.download(message.text, progress_message)
     await progress_message.delete()
 
-    if not (result_info[0] and result_info[1]):
-        return
+    async with ChatActionSender.upload_video(message.from_user.id, message.bot):
+        try:
+            msg = await SendVideoUseCase().execute_reply(result_video, message)
+        except SendingError:
+            return
 
-    video_name, info, is_exist = result_info
+    if not isinstance(result_video.file, str):
+        video_file_id = msg.video.file_id
 
-    if is_exist:
-        await message.reply_video(video_name, **create_info_dict_for_send(info))
-        return
+        await video_service.create(VideoCreate(id=video_id, file_id=video_file_id))
 
-    async with ChatActionSender.upload_video(message.chat.id, message.bot):
-        video_file = FSInputFile(path=os.path.join(all_media_dir, video_name))
-        msg = await message.reply_video(video_file, **create_info_dict_for_send(info))
-
-    video_file_id = msg.video.file_id
-    await video_service.create(VideoCreate(id=info['id'], file_id=video_file_id))
-
-    os.remove(os.path.join(all_media_dir, video_name))
+        os.remove(os.path.join(all_media_dir, result_video.cover + '.mp4'))

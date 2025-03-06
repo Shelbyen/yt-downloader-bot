@@ -1,10 +1,12 @@
 import asyncio
+import os
 from os import listdir
 
-from aiogram.types import Message
+from aiogram.types import Message, FSInputFile
 from yt_dlp import YoutubeDL
 
 from src.schemas.video_schema import VideoBase
+from src.schemas.video_to_send_schema import VideoToSend
 from src.services.video_service import video_service
 
 
@@ -45,12 +47,19 @@ class Downloader:
         self.download_now = {}
         self.download_now_id = {}
 
-    async def download(self, url: str, message: Message) -> tuple[str | None, dict | None, bool]:
+    async def download(self, url: str, message: Message) -> tuple[VideoToSend, str] | None:
         video_info = get_video_info(url)
 
         saved_file_id: VideoBase | None = await video_service.get(video_info['id'])
         if saved_file_id:
-            return saved_file_id.file_id, video_info, True
+            return (VideoToSend(file=saved_file_id.file_id,
+                                caption=video_info['title'] + f' [{video_info["id"]}]',
+                                width=video_info.get('width'),
+                                height=video_info.get('height'),
+                                duration=video_info.get('duration'),
+                                cover=video_info.get('thumbnail')
+                                ),
+                    video_info['id'])
 
         # self.download_now_id[message.from_user.id] = video_id
         # self.download_now[video_id] = 0
@@ -65,7 +74,14 @@ class Downloader:
         for file_name in listdir('res/yt-dir'):
             if file_name.endswith(f'[{video_info["id"]}].mp4'):
                 video_name = file_name
-        return video_name, video_info, False
+        return (VideoToSend(file=FSInputFile(path=os.path.join('res/yt-dir', video_name)),
+                            caption=video_name[:-4],
+                            width=video_info.get('width'),
+                            height=video_info.get('height'),
+                            duration=video_info.get('duration'),
+                            cover=video_info.get('thumbnail')
+                            ),
+                video_info['id'])
 
 
 downloader = Downloader()
