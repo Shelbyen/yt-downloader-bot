@@ -29,7 +29,7 @@ async def check_message(message: Message, localized_message: LocalizedMessageWra
         except SendingError:
             return
 
-    if not isinstance(result_video.file, str):
+    if not isinstance(result_video.video, str):
         video_file_id = msg.video.file_id
 
         await video_service.create(VideoCreate(id=video_id, file_id=video_file_id))
