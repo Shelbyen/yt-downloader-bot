@@ -52,7 +52,7 @@ class Downloader:
 
         saved_file_id: VideoBase | None = await video_service.get(video_info['id'])
         if saved_file_id:
-            return (VideoToSend(file=saved_file_id.file_id,
+            return (VideoToSend(video=saved_file_id.file_id,
                                 caption=video_info['title'] + f' [{video_info["id"]}]',
                                 width=video_info.get('width'),
                                 height=video_info.get('height'),
@@ -74,7 +74,7 @@ class Downloader:
         for file_name in listdir('res/yt-dir'):
             if file_name.endswith(f'[{video_info["id"]}].mp4'):
                 video_name = file_name
-        return (VideoToSend(file=FSInputFile(path=os.path.join('res/yt-dir', video_name)),
+        return (VideoToSend(video=FSInputFile(path=os.path.join('res/yt-dir', video_name)),
                             caption=video_name[:-4],
                             width=video_info.get('width'),
                             height=video_info.get('height'),

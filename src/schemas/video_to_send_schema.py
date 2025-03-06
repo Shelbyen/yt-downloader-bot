@@ -5,7 +5,7 @@ from aiogram.types import InputFile
 
 @dataclass
 class VideoToSend:
-    file: str | InputFile
+    video: str | InputFile
     caption: str
     width: int | None = None
     height: int | None = None
