@@ -32,12 +32,13 @@ ydl_opts = {
     # 'progress_hooks': [progress_hook],
     'match_filter': shorted_than_a_time,
     'paths': {'home': 'res/yt-dir', 'temp': 'temp'},
-    'quiet': True
+    'quiet': True,
+    'cookiefile': 'res/yt-dir/cookies/shebik_cookies.txt'
 }
 
 
 def get_video_info(url) -> dict:
-    with YoutubeDL({'check_formats': False, 'quiet': True}) as ytl:
+    with YoutubeDL({'check_formats': False, 'quiet': True, 'cookiefile': 'res/yt-dir/cookies/shebik_cookies.txt'}) as ytl:
         info = ytl.extract_info(url, download=False)
     return info
 
