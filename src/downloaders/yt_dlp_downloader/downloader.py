@@ -1,22 +1,17 @@
-import asyncio
 import os
 from os import listdir
 
-from aiogram.types import Message, FSInputFile
+from aiogram.types import FSInputFile
 from yt_dlp import YoutubeDL
 
+from src.downloaders.downloader import Downloader
 from src.schemas.video_schema import VideoBase
 from src.schemas.video_to_send_schema import VideoToSend
 from src.services.video_service import video_service
 
 
 def progress_hook(d):
-    if d['status'] == 'downloading' and d.get('total_bytes_estimate') and d.get('downloaded_bytes'):
-        pr = d['downloaded_bytes'] / d['total_bytes_estimate']
-        downloader.download_now[d['info_dict']['id']] = pr
-    else:
-        downloader.download_now[d['info_dict']['id']] = 'done'
-    asyncio.get_event_loop().create_task(asyncio.sleep(0.01))
+    pass
 
 
 def shorted_than_a_time(info, *, incomplete):
@@ -43,12 +38,12 @@ def get_video_info(url) -> dict:
     return info
 
 
-class Downloader:
+class YtDlpDownloader(Downloader):
     def __init__(self):
         self.download_now = {}
         self.download_now_id = {}
 
-    async def download(self, url: str, message: Message) -> tuple[VideoToSend, str] | None:
+    async def download(self, url: str, **kwargs) -> tuple[VideoToSend, str] | None:
         video_info = get_video_info(url)
 
         saved_file_id: VideoBase | None = await video_service.get(video_info['id'])
@@ -83,6 +78,3 @@ class Downloader:
                             cover=video_info.get('thumbnail')
                             ),
                 video_info['id'])
-
-
-downloader = Downloader()

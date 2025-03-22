@@ -7,13 +7,13 @@ from aiogram.types import Message
 from aiogram.utils.chat_action import ChatActionSender
 from sqlalchemy.exc import IntegrityError
 
+from src.downloaders import downloader
 from src.exceptions.sending_exceptions import BigFileError, SendingError
 from src.filters.url_filter import UrlFilter
 from src.middlewares.message_wrapping import LocalizedMessageWrapper
 from src.schemas.video_schema import VideoCreate
 from src.services.video_service import video_service
 from src.use_cases.send_video_use_case import SendVideoUseCase
-from src.yt_download.downloader import downloader
 
 router = Router()
 all_media_dir = 'res/yt-dir'
