@@ -5,7 +5,7 @@
 You will need `FFmpeg` and `python >= 3.10`
 
 # Setup
-For setup the ***yt-downloader-bot***:
+For set up the ***yt-downloader-bot***:
 
 ## Clone
 Clone it to any place on your machine:
