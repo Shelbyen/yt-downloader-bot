@@ -43,7 +43,7 @@ class YtDlpDownloader(Downloader):
         self.download_now = {}
         self.download_now_id = {}
 
-    async def download(self, url: str, **kwargs) -> tuple[VideoToSend, str] | None:
+    async def download(self, url: str, *args, **kwargs) -> tuple[VideoToSend, str] | None:
         video_info = get_video_info(url)
 
         saved_file_id: VideoBase | None = await video_service.get(video_info['id'])
