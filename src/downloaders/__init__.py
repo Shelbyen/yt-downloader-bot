@@ -4,7 +4,7 @@ from src.downloaders.yt_dlp_downloader import YtDlpDownloader
 from src.exceptions.downloader_exceptions import DownloaderWasNotFound
 
 match project_settings.DOWNLOADER:
-    case DownloadersEnum.yt_dlp.value:
+    case DownloadersEnum.YT_DLP.value:
         downloader = YtDlpDownloader()
     case _:
         raise DownloaderWasNotFound('The loader is not in the list of possible ones')

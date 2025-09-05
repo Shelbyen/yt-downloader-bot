@@ -7,10 +7,13 @@ from src.use_cases.youtube_url_is_valid_use_case import YoutubeUrlIsValidUseCase
 
 
 class UrlFilter(BaseFilter):
+    """ Is youtube url or not """
     def __init__(self, answer_when_wrong: bool = True):
         self.answer_when_wrong = answer_when_wrong
 
     async def __call__(self, message: Message) -> bool:
+        if message.from_user is None:
+            return False
         try:
             YoutubeUrlIsValidUseCase().execute(message.text, message.entities)
         except UrlParseError as exception:

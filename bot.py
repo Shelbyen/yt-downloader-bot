@@ -11,10 +11,12 @@ from src.handlers import routers
 
 
 async def on_startup():
+    """ Startup function """
     print('Бот вышел в онлайн')
 
 
 def setup_logging():
+    """ Base logging setup """
     logging.basicConfig(
         level=logging.INFO,
         filename=f"logs/{project_settings.VERSION}_{datetime.now().strftime('%d%m%Y_%H%M%S')}.log",
@@ -25,7 +27,10 @@ def setup_logging():
 
 
 async def main():
-    session = AiohttpSession(api=TelegramAPIServer.from_base("http://localhost:8081", is_local=True))
+    """ Connect to telegram api server and start all bot """
+    session = AiohttpSession(
+        api=TelegramAPIServer.from_base("http://localhost:8081", is_local=True)
+    )
     bot = Bot(token=project_settings.TOKEN, session=session)
     dp = Dispatcher()
 

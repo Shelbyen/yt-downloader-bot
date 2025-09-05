@@ -8,7 +8,7 @@ router = Router()
 
 @router.message(F.video)
 async def set_video(message: Message, state: FSMContext):
-    video_id = message.video.file_id
+    video_id = message.video.file_id # type: ignore
     await state.set_data({'video': video_id})
     await message.answer('Прочитал!')
 
@@ -16,4 +16,6 @@ async def set_video(message: Message, state: FSMContext):
 @router.message(Command('get_video'))
 async def get_video(message: Message, state: FSMContext):
     video_id = await state.get_value('video')
+    if video_id is None:
+        return
     await message.answer_video(video=video_id)

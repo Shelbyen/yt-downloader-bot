@@ -21,13 +21,12 @@ class I18n:
                     self.translations[lang].update(json.load(file))
 
 
-    def translate(self, language_code: str, key: str):
+    def translate(self, language_code: str | None, key: str):
         if language_code in self.translations or language_code is None:
             return self.translations.get(
                 language_code if language_code else self.default_language, {}
             ).get(key, key)
-        else:
-            raise ValueError(f"Language '{language_code}' is not supported.")
+        raise ValueError(f"Language '{language_code}' is not supported.")
 
 
 i18n = I18n()

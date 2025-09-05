@@ -3,6 +3,7 @@ from aiogram.types import Message
 
 
 class ChatTypeFilter(BaseFilter):
+    """ Filtering chat type (group and supergroup or not) """
     def __init__(self, is_group: bool = False):
         self.is_group = is_group
 
