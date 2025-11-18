@@ -1,3 +1,4 @@
+from argparse import ArgumentParser
 import asyncio
 import logging
 from datetime import datetime
@@ -26,11 +27,13 @@ def setup_logging():
     )
 
 
-async def main():
+async def main(use_api_server: bool = True, address: str = 'localhost', port: int = 8081):
     """ Connect to telegram api server and start all bot """
-    session = AiohttpSession(
-        api=TelegramAPIServer.from_base("http://localhost:8081", is_local=True)
-    )
+    session = None
+    if use_api_server:
+        session = AiohttpSession(
+            api=TelegramAPIServer.from_base(f"http://{address}:{port}", is_local=True)
+        )
     bot = Bot(token=project_settings.TOKEN, session=session)
     dp = Dispatcher()
 
@@ -44,4 +47,17 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    parser = ArgumentParser()
+    parser.add_argument("--use_server", type=str, default='True',
+                        choices=('True', 'False'),
+                        help="Use Telegram API Server?"
+                        )   # Argparser does not know how to work with bool
+    parser.add_argument("--address", type=str, default='localhost',
+                        help="Address Telegram API Server"
+                        )
+    parser.add_argument("--port", type=int, default=8081,
+                        help="Port Telegram API Server"
+                        )
+    args = parser.parse_args()
+    use_server = args.use_server == 'True'
+    asyncio.run(main(args.use_server, args.address, args.port))
