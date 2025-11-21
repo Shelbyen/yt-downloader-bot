@@ -5,6 +5,7 @@ from aiogram.types import FSInputFile
 from yt_dlp import YoutubeDL
 
 from src.downloaders.downloader import Downloader
+from src.exceptions.downloader_exceptions import DownloaderError
 from src.schemas.video_schema import VideoBase
 from src.schemas.video_to_send_schema import VideoToSend
 from src.services.video_service import video_service
@@ -35,7 +36,7 @@ ydl_opts = {
 def get_video_info(url) -> dict:
     with YoutubeDL({'check_formats': False, 'quiet': True, 'cookiefile': 'res/yt-dir/cookies/shebik_cookies.txt'}) as ytl:
         info = ytl.extract_info(url, download=False)
-    return info
+    return dict(info)
 
 
 class YtDlpDownloader(Downloader):
@@ -60,21 +61,25 @@ class YtDlpDownloader(Downloader):
         # self.download_now_id[message.from_user.id] = video_id
         # self.download_now[video_id] = 0
 
-        ydl = YoutubeDL(ydl_opts)
+        ydl = YoutubeDL(params=ydl_opts) # pyright: ignore[reportArgumentType]
 
         error_code = ydl.download(url)
         if error_code:
-            raise Exception('Video failed to download')
+            raise DownloaderError('Video failed to download')
 
         video_name = None
         for file_name in listdir('res/yt-dir'):
             if file_name.endswith(f'[{video_info["id"]}].mp4'):
                 video_name = file_name
-        return (VideoToSend(video=FSInputFile(path=os.path.join('res/yt-dir', video_name)),
+        if video_name is None:
+            raise DownloaderError()
+
+        return (VideoToSend(video=FSInputFile(os.path.join('res/yt-dir', video_name)),
                             caption=video_name[:-4],
                             width=video_info.get('width'),
                             height=video_info.get('height'),
                             duration=video_info.get('duration'),
-                            cover=video_info.get('thumbnail')
+                            cover=video_info.get('thumbnail'),
+                            video_file=os.path.join('res/yt-dir', video_name)
                             ),
                 video_info['id'])

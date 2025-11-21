@@ -4,6 +4,8 @@ from aiogram import Router
 from aiogram.types import Message
 from aiogram.utils.chat_action import ChatActionSender
 
+from sqlalchemy.exc import IntegrityError
+
 from src.downloaders import downloader
 from src.exceptions.sending_exceptions import SendingError
 from src.filters.url_filter import UrlFilter
@@ -18,20 +20,24 @@ all_media_dir = 'res/yt-dir'
 
 @router.message(UrlFilter(answer_when_wrong=False))
 async def check_message(message: Message, localized_message: LocalizedMessageWrapper):
+    if message.text is None or message.bot is None:
+        return
     progress_message = await localized_message.reply('starting_download')
 
-    result_video, video_id = await downloader.download(message.text, progress_message) # type: ignore
+    result_video, video_id = await downloader.download(message.text, progress_message)
     await progress_message.delete()
 
-    async with ChatActionSender.upload_video(message.from_user.id, message.bot): # type: ignore
+    async with ChatActionSender.upload_video(message.chat.id, message.bot):
         try:
             msg = await SendVideoUseCase().execute(result_video, message.reply_video)
         except SendingError:
             return
 
-    if not isinstance(result_video.video, str):
+    if result_video.video_file is not None:
         video_file_id = msg.video.file_id
+        try:
+            await video_service.create(VideoCreate(id=video_id, file_id=video_file_id)) # pyright: ignore[reportArgumentType]
 
-        await video_service.create(VideoCreate(id=video_id, file_id=video_file_id)) # type: ignore
-        
-        os.remove(os.path.join(all_media_dir, result_video.cover + '.mp4'))
+            os.remove(result_video.video_file)
+        except IntegrityError:
+            return

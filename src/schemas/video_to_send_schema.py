@@ -12,3 +12,4 @@ class VideoToSend:
     duration: int | None = None
     cover: str | None = None
     supports_streaming: bool = True
+    video_file: str | None = None

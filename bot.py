@@ -60,4 +60,4 @@ if __name__ == "__main__":
                         )
     args = parser.parse_args()
     use_server = args.use_server == 'True'
-    asyncio.run(main(args.use_server, args.address, args.port))
+    asyncio.run(main(use_server, args.address, args.port))
