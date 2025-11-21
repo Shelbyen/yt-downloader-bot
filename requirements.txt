@@ -1,8 +1,6 @@
-aiogram~=3.18.0
-python-dotenv~=1.0.1
-pydantic-settings~=2.8.0
-yt-dlp>=2025.3.31
-pydantic~=2.10.6
-SQLAlchemy~=2.0.38
-alembic~=1.14.1
-asyncpg~=0.30.0
+yt-dlp[default]
+aiogram
+sqlalchemy
+alembic
+pydantic-settings
+asyncpg
