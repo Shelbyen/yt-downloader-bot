@@ -46,6 +46,8 @@ async def get_link(message: Message, localized_message: LocalizedMessageWrapper)
             msg = await SendVideoUseCase().execute(result_video, message.answer_video)
         except BigFileError:
             await localized_message.answer("video_too_big")
+            if result_video.video_file is not None:
+                os.remove(result_video.video_file)
             return
         except SendingError:
             await localized_message.answer("sending_error")
